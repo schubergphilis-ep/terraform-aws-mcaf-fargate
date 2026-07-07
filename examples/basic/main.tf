@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "task_execution_role" {
 }
 
 module "vpc" {
-  source  = "schubergphilis/mcaf-vpc/aws"
+  source  = "schubergphilis-ep/mcaf-vpc/aws"
   version = "~> 3.0.0"
 
   name                = "redshift-vpc"

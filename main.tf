@@ -65,7 +65,7 @@ data "aws_region" "current" {
 }
 
 module "task_execution_role" {
-  source  = "schubergphilis/mcaf-role/aws"
+  source  = "schubergphilis-ep/mcaf-role/aws"
   version = "~> 0.5.3"
 
   name                  = "TaskExecutionRole-${var.name}"
