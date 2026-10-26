@@ -13,10 +13,10 @@ This document captures required refactoring on your part when upgrading to a mod
 
 #### Variables
 
-- `role_policy` is now attached to the new task role only, and no longer to the task execution role.
+- `role_policy` has been renamed to `task_role_policy`, and is now attached to the new task role only, and no longer to the task execution role.
 - `execution_role_policy` (new, optional) adds an inline policy to the task execution role. The `AmazonECSTaskExecutionRolePolicy` managed policy is still always attached.
 
-If you use `secrets`, or ECS otherwise needs extra permissions to start the task (for example `secretsmanager:GetSecretValue`, `ssm:GetParameters` or `kms:Decrypt`), move those permissions out of `role_policy` and into `execution_role_policy`. Otherwise tasks will fail to start.
+If you use `secrets`, or ECS otherwise needs extra permissions to start the task (for example `secretsmanager:GetSecretValue`, `ssm:GetParameters` or `kms:Decrypt`), move those permissions out of `task_role_policy` (previously `role_policy`) and into `execution_role_policy`. Otherwise tasks will fail to start.
 
 #### Outputs
 

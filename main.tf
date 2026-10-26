@@ -72,7 +72,7 @@ module "task_role" {
   create_policy         = true
   principal_type        = "Service"
   principal_identifiers = ["ecs-tasks.amazonaws.com"]
-  role_policy           = var.role_policy
+  role_policy           = var.task_role_policy
   postfix               = var.postfix
   tags                  = var.tags
   permissions_boundary  = var.permissions_boundary

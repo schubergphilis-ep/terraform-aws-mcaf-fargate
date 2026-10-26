@@ -286,11 +286,6 @@ variable "region" {
   description = "The AWS region where resources will be created; if omitted the default provider region is used"
 }
 
-variable "role_policy" {
-  type        = string
-  description = "The policy document for the task role, granting the permissions needed by the application running in the container"
-}
-
 variable "scale_up_action" {
   type = object({
     min_capacity = number
@@ -368,6 +363,11 @@ variable "target_group_stickiness" {
   type        = bool
   default     = false
   description = "Whether to bind a client’s session to a specific instance within the target group"
+}
+
+variable "task_role_policy" {
+  type        = string
+  description = "The policy document for the task role, granting the permissions needed by the application running in the container"
 }
 
 variable "vpc_id" {

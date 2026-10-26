@@ -35,6 +35,6 @@ module "pets" {
   ecs_subnet_ids           = module.vpc.private_subnet_ids
   load_balancer_subnet_ids = module.vpc.public_subnet_ids
   protocol                 = "HTTP"
-  role_policy              = data.aws_iam_policy_document.task_role.json
+  task_role_policy         = data.aws_iam_policy_document.task_role.json
   vpc_id                   = module.vpc.id
 }

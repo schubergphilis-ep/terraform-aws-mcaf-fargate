@@ -68,7 +68,7 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="input_ecs_subnet_ids"></a> [ecs\_subnet\_ids](#input\_ecs\_subnet\_ids) | List of subnet IDs assigned to ECS cluster | `list(string)` | n/a | yes |
 | <a name="input_image"></a> [image](#input\_image) | Docker image to run in the ECS cluster | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the Fargate cluster | `string` | n/a | yes |
-| <a name="input_role_policy"></a> [role\_policy](#input\_role\_policy) | The policy document for the task role, granting the permissions needed by the application running in the container | `string` | n/a | yes |
+| <a name="input_task_role_policy"></a> [task\_role\_policy](#input\_task\_role\_policy) | The policy document for the task role, granting the permissions needed by the application running in the container | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | AWS vpc id | `string` | n/a | yes |
 | <a name="input_architecture"></a> [architecture](#input\_architecture) | Instruction set architecture of the Fargate instance | `string` | `"x86_64"` | no |
 | <a name="input_capacity_provider_asg_arn"></a> [capacity\_provider\_asg\_arn](#input\_capacity\_provider\_asg\_arn) | ARN of Autoscaling Group for capacity provider | `string` | `null` | no |
