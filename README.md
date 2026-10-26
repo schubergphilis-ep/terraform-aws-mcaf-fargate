@@ -88,7 +88,6 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Enable ECS Exec for the service | `bool` | `false` | no |
 | <a name="input_entrypoint"></a> [entrypoint](#input\_entrypoint) | The entry point that's passed to the container | `list(string)` | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment variables defined in the docker container | `map(string)` | `{}` | no |
-| <a name="input_execution_role_policy"></a> [execution\_role\_policy](#input\_execution\_role\_policy) | Optional policy document for the task execution role, e.g. to allow ECS to read the secrets in `secrets`. The AmazonECSTaskExecutionRolePolicy managed policy is always attached | `string` | `null` | no |
 | <a name="input_health_check"></a> [health\_check](#input\_health\_check) | Health check settings for the container | <pre>object({<br/>    healthy_threshold   = number,<br/>    interval            = number,<br/>    path                = string,<br/>    unhealthy_threshold = number<br/>  })</pre> | <pre>{<br/>  "healthy_threshold": 3,<br/>  "interval": 30,<br/>  "path": null,<br/>  "unhealthy_threshold": 3<br/>}</pre> | no |
 | <a name="input_health_check_grace_period_seconds"></a> [health\_check\_grace\_period\_seconds](#input\_health\_check\_grace\_period\_seconds) | Seconds to ignore failing load balancer health checks on newly instantiated tasks to prevent premature shutdown. Only valid for services configured to use load balancers. | `number` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The custom KMS key ARN used encryption of the Cloudwatch log group | `string` | `null` | no |
@@ -118,6 +117,7 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="input_subdomain"></a> [subdomain](#input\_subdomain) | The DNS subdomain and zone ID for the LB | <pre>object({<br/>    name    = string,<br/>    zone_id = string<br/>  })</pre> | `null` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resources | `map(string)` | `{}` | no |
 | <a name="input_target_group_stickiness"></a> [target\_group\_stickiness](#input\_target\_group\_stickiness) | Whether to bind a client’s session to a specific instance within the target group | `bool` | `false` | no |
+| <a name="input_task_execution_role_policy"></a> [task\_execution\_role\_policy](#input\_task\_execution\_role\_policy) | Optional policy document for the task execution role, e.g. to allow ECS to read the secrets in `secrets`. The AmazonECSTaskExecutionRolePolicy managed policy is always attached | `string` | `null` | no |
 | <a name="input_working_directory"></a> [working\_directory](#input\_working\_directory) | The working directory to run commands inside the container in | `string` | `null` | no |
 
 ## Outputs

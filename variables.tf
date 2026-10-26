@@ -108,12 +108,6 @@ variable "environment" {
   description = "Environment variables defined in the docker container"
 }
 
-variable "execution_role_policy" {
-  type        = string
-  default     = null
-  description = "Optional policy document for the task execution role, e.g. to allow ECS to read the secrets in `secrets`. The AmazonECSTaskExecutionRolePolicy managed policy is always attached"
-}
-
 variable "health_check" {
   type = object({
     healthy_threshold   = number,
@@ -363,6 +357,12 @@ variable "target_group_stickiness" {
   type        = bool
   default     = false
   description = "Whether to bind a client’s session to a specific instance within the target group"
+}
+
+variable "task_execution_role_policy" {
+  type        = string
+  default     = null
+  description = "Optional policy document for the task execution role, e.g. to allow ECS to read the secrets in `secrets`. The AmazonECSTaskExecutionRolePolicy managed policy is always attached"
 }
 
 variable "task_role_policy" {

@@ -85,7 +85,7 @@ module "task_execution_role" {
   name                  = "TaskExecutionRole-${var.name}"
   principal_type        = "Service"
   principal_identifiers = ["ecs-tasks.amazonaws.com"]
-  role_policy           = var.execution_role_policy
+  role_policy           = var.task_execution_role_policy
   policy_arns           = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
   postfix               = var.postfix
   tags                  = var.tags
