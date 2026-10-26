@@ -55,7 +55,12 @@ output "task_definition_arn" {
 
 output "task_execution_role_arn" {
   value       = module.task_execution_role.arn
-  description = "ARN of the execution role"
+  description = "ARN of the task execution role"
+}
+
+output "task_role_arn" {
+  value       = module.task_role.arn
+  description = "ARN of the task role"
 }
 
 output "tcp_listener_arn" {

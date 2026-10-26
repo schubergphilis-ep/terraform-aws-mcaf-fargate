@@ -22,7 +22,8 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_task_execution_role"></a> [task\_execution\_role](#module\_task\_execution\_role) | schubergphilis-ep/mcaf-role/aws | ~> 0.5.3 |
+| <a name="module_task_execution_role"></a> [task\_execution\_role](#module\_task\_execution\_role) | schubergphilis-ep/mcaf-role/aws | ~> 0.6.0 |
+| <a name="module_task_role"></a> [task\_role](#module\_task\_role) | schubergphilis-ep/mcaf-role/aws | ~> 0.6.0 |
 
 ## Resources
 
@@ -46,7 +47,6 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | [aws_efs_file_system_policy.policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/efs_file_system_policy) | resource |
 | [aws_efs_mount_target.mount](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/efs_mount_target) | resource |
 | [aws_eip.lb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/eip) | resource |
-| [aws_iam_role_policy_attachment.task_execution_role](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy_attachment) | resource |
 | [aws_lb.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb) | resource |
 | [aws_lb_listener.http](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
 | [aws_lb_listener.https](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_listener) | resource |
@@ -68,7 +68,7 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="input_ecs_subnet_ids"></a> [ecs\_subnet\_ids](#input\_ecs\_subnet\_ids) | List of subnet IDs assigned to ECS cluster | `list(string)` | n/a | yes |
 | <a name="input_image"></a> [image](#input\_image) | Docker image to run in the ECS cluster | `string` | n/a | yes |
 | <a name="input_name"></a> [name](#input\_name) | Name of the Fargate cluster | `string` | n/a | yes |
-| <a name="input_role_policy"></a> [role\_policy](#input\_role\_policy) | The Policy document for the role | `string` | n/a | yes |
+| <a name="input_role_policy"></a> [role\_policy](#input\_role\_policy) | The policy document for the task role, granting the permissions needed by the application running in the container | `string` | n/a | yes |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | AWS vpc id | `string` | n/a | yes |
 | <a name="input_architecture"></a> [architecture](#input\_architecture) | Instruction set architecture of the Fargate instance | `string` | `"x86_64"` | no |
 | <a name="input_capacity_provider_asg_arn"></a> [capacity\_provider\_asg\_arn](#input\_capacity\_provider\_asg\_arn) | ARN of Autoscaling Group for capacity provider | `string` | `null` | no |
@@ -88,6 +88,7 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="input_enable_execute_command"></a> [enable\_execute\_command](#input\_enable\_execute\_command) | Enable ECS Exec for the service | `bool` | `false` | no |
 | <a name="input_entrypoint"></a> [entrypoint](#input\_entrypoint) | The entry point that's passed to the container | `list(string)` | `[]` | no |
 | <a name="input_environment"></a> [environment](#input\_environment) | Environment variables defined in the docker container | `map(string)` | `{}` | no |
+| <a name="input_execution_role_policy"></a> [execution\_role\_policy](#input\_execution\_role\_policy) | Optional policy document for the task execution role, e.g. to allow ECS to read the secrets in `secrets`. The AmazonECSTaskExecutionRolePolicy managed policy is always attached | `string` | `null` | no |
 | <a name="input_health_check"></a> [health\_check](#input\_health\_check) | Health check settings for the container | <pre>object({<br/>    healthy_threshold   = number,<br/>    interval            = number,<br/>    path                = string,<br/>    unhealthy_threshold = number<br/>  })</pre> | <pre>{<br/>  "healthy_threshold": 3,<br/>  "interval": 30,<br/>  "path": null,<br/>  "unhealthy_threshold": 3<br/>}</pre> | no |
 | <a name="input_health_check_grace_period_seconds"></a> [health\_check\_grace\_period\_seconds](#input\_health\_check\_grace\_period\_seconds) | Seconds to ignore failing load balancer health checks on newly instantiated tasks to prevent premature shutdown. Only valid for services configured to use load balancers. | `number` | `null` | no |
 | <a name="input_kms_key_id"></a> [kms\_key\_id](#input\_kms\_key\_id) | The custom KMS key ARN used encryption of the Cloudwatch log group | `string` | `null` | no |
@@ -100,7 +101,7 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="input_log_retention_days"></a> [log\_retention\_days](#input\_log\_retention\_days) | The cloudwatch log group retention in days | `number` | `365` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | Fargate instance memory to provision (in MiB) | `number` | `2048` | no |
 | <a name="input_operating_system_family"></a> [operating\_system\_family](#input\_operating\_system\_family) | The operating system family of the Fargate instance | `string` | `"LINUX"` | no |
-| <a name="input_permissions_boundary"></a> [permissions\_boundary](#input\_permissions\_boundary) | The permissions boundary to set to TaskExecutionRole | `string` | `null` | no |
+| <a name="input_permissions_boundary"></a> [permissions\_boundary](#input\_permissions\_boundary) | The permissions boundary to set on the task role and task execution role | `string` | `null` | no |
 | <a name="input_port"></a> [port](#input\_port) | Port exposed by the docker image to redirect traffic to | `number` | `3000` | no |
 | <a name="input_postfix"></a> [postfix](#input\_postfix) | Postfix the role and policy names with Role and Policy | `bool` | `false` | no |
 | <a name="input_protocol"></a> [protocol](#input\_protocol) | The target protocol | `string` | `null` | no |
@@ -135,7 +136,8 @@ IMPORTANT: We do not pin modules to versions in our examples. We highly recommen
 | <a name="output_security_group_id"></a> [security\_group\_id](#output\_security\_group\_id) | Security group ID of the ECS task |
 | <a name="output_target_group_arn"></a> [target\_group\_arn](#output\_target\_group\_arn) | The ARN of the Target Group |
 | <a name="output_task_definition_arn"></a> [task\_definition\_arn](#output\_task\_definition\_arn) | ARN of the task definition |
-| <a name="output_task_execution_role_arn"></a> [task\_execution\_role\_arn](#output\_task\_execution\_role\_arn) | ARN of the execution role |
+| <a name="output_task_execution_role_arn"></a> [task\_execution\_role\_arn](#output\_task\_execution\_role\_arn) | ARN of the task execution role |
+| <a name="output_task_role_arn"></a> [task\_role\_arn](#output\_task\_role\_arn) | ARN of the task role |
 | <a name="output_tcp_listener_arn"></a> [tcp\_listener\_arn](#output\_tcp\_listener\_arn) | The ARN of the TCP listener |
 <!-- END_TF_DOCS -->
 

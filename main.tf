@@ -64,11 +64,11 @@ data "aws_region" "current" {
   region = var.region
 }
 
-module "task_execution_role" {
+module "task_role" {
   source  = "schubergphilis-ep/mcaf-role/aws"
-  version = "~> 0.5.3"
+  version = "~> 0.6.0"
 
-  name                  = "TaskExecutionRole-${var.name}"
+  name                  = "TaskRole-${var.name}"
   create_policy         = true
   principal_type        = "Service"
   principal_identifiers = ["ecs-tasks.amazonaws.com"]
@@ -78,9 +78,18 @@ module "task_execution_role" {
   permissions_boundary  = var.permissions_boundary
 }
 
-resource "aws_iam_role_policy_attachment" "task_execution_role" {
-  role       = module.task_execution_role.id
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+module "task_execution_role" {
+  source  = "schubergphilis-ep/mcaf-role/aws"
+  version = "~> 0.6.0"
+
+  name                  = "TaskExecutionRole-${var.name}"
+  principal_type        = "Service"
+  principal_identifiers = ["ecs-tasks.amazonaws.com"]
+  role_policy           = var.execution_role_policy
+  policy_arns           = ["arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"]
+  postfix               = var.postfix
+  tags                  = var.tags
+  permissions_boundary  = var.permissions_boundary
 }
 
 resource "aws_cloudwatch_log_group" "default" {
@@ -92,11 +101,10 @@ resource "aws_cloudwatch_log_group" "default" {
 }
 
 resource "aws_ecs_task_definition" "default" {
-  #checkov:skip=CKV_AWS_249:We argue its not necessary to split up task_role_arn & execution_role_arn since in this case it's not adding much security or maintainability benefits
   region                   = var.region
   family                   = var.name
   execution_role_arn       = module.task_execution_role.arn
-  task_role_arn            = module.task_execution_role.arn
+  task_role_arn            = module.task_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = [var.service_launch_type]
   cpu                      = var.cpu

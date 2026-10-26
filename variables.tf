@@ -108,6 +108,12 @@ variable "environment" {
   description = "Environment variables defined in the docker container"
 }
 
+variable "execution_role_policy" {
+  type        = string
+  default     = null
+  description = "Optional policy document for the task execution role, e.g. to allow ECS to read the secrets in `secrets`. The AmazonECSTaskExecutionRolePolicy managed policy is always attached"
+}
+
 variable "health_check" {
   type = object({
     healthy_threshold   = number,
@@ -225,7 +231,7 @@ variable "name" {
 variable "permissions_boundary" {
   type        = string
   default     = null
-  description = "The permissions boundary to set to TaskExecutionRole"
+  description = "The permissions boundary to set on the task role and task execution role"
 }
 
 variable "port" {
@@ -282,7 +288,7 @@ variable "region" {
 
 variable "role_policy" {
   type        = string
-  description = "The Policy document for the role"
+  description = "The policy document for the task role, granting the permissions needed by the application running in the container"
 }
 
 variable "scale_up_action" {

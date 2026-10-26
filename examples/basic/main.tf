@@ -5,7 +5,7 @@ provider "aws" {
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
-data "aws_iam_policy_document" "task_execution_role" {
+data "aws_iam_policy_document" "task_role" {
   statement {
     actions = [
       "s3:GetObject",
@@ -35,6 +35,6 @@ module "pets" {
   ecs_subnet_ids           = module.vpc.private_subnet_ids
   load_balancer_subnet_ids = module.vpc.public_subnet_ids
   protocol                 = "HTTP"
-  role_policy              = data.aws_iam_policy_document.task_execution_role.json
+  role_policy              = data.aws_iam_policy_document.task_role.json
   vpc_id                   = module.vpc.id
 }
